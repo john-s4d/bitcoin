@@ -165,5 +165,11 @@ bool DecodeBase58Check(const std::string& str, std::vector<unsigned char>& vchRe
     if (!ContainsNoNUL(str)) {
         return false;
     }
+    // if the most significant bit is set (c > 127), the character is not ASCII
+    for (unsigned char c : str) {
+        if (c & 0x80) {
+            return false;
+        }
+    }
     return DecodeBase58Check(str.c_str(), vchRet, max_ret);
 }
